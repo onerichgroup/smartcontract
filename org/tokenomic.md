@@ -77,6 +77,12 @@
     <th>69,736</th>
     <th>1,372,379</th>
   </tr>
+     <tr>
+    <th>etc..</th>
+    <th>-</th>
+    <th>-</th>
+    <th>-</th>
+  </tr>
      
 </table>
 
