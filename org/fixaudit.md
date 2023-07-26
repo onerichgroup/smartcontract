@@ -55,17 +55,6 @@ require(pid <=5 ,"Invalid pid");
 </p>
 
 <p>
-<b>MC - Missing Check</b></br>
-Fixed : Code</br>
-
-```
-require(pid <=5 ,"Invalid pid");
-
-```
- </br>
-</p>
-
-<p>
 
 <b>SCD - Supply Configuration Discrepancy</b></br>
 Fixed : Code</br>
