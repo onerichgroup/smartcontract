@@ -29,7 +29,7 @@ Fixed = Code</br>
 </p>
 
 <p>
-<b style="color:orange">UMP - Unusual Minting Process</b>
+<b style="color:orange">UMP - Unusual Minting Process</b><br>
 Fixed = Code</br>
 Desc = Have public bool minted[] for check</br>
 
