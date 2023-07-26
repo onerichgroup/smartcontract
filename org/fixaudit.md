@@ -85,6 +85,37 @@ uint256[] public config_timelock=[7890000,15780000,31560000,47340000,63120000,94
 
 
 
+<p>
+
+<b>CR - Code Repetition</b></br>
+Fixed : Code</br>
+Desc : Option emergency on unstake function , and remove emergency function<br>
+
+```
+
+ function unstake(uint256 tokenId ,bool is_emergency) public {
+        require(tokenId>0,"Require tokenId");
+        if(!is_emergency){
+        claim_staking_reward(tokenId);
+        }
+
+```
+ </br>
+</p>
+
+<p>
+
+<b>CR - Code Repetition</b></br>
+Fixed : Code</br>
+Desc : Option emergency on unstake function , and remove emergency function<br>
+
+```
+
+ 
+
+```
+ </br>
+</p>
 
 
 
