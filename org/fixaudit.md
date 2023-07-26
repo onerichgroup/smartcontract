@@ -65,6 +65,40 @@ require(pid <=5 ,"Invalid pid");
  </br>
 </p>
 
+<p>
+
+<b>SCD - Supply Configuration Discrepancy</b></br>
+Fixed : Code</br>
+
+```
+uint256 public unMint = 2e24;
+
+ _limit_mint(msg.sender, 2e23); //initial mint
+
+```
+ </br>
+</p>
+
+
+
+<p>
+
+<b>RAU - Redundant Array Usage</b></br>
+Fixed : Code</br>
+
+```
+
+uint256[] public config_timelock=[7890000,15780000,31560000,47340000,63120000,94680000]; //3,6,12,18,24,36 months
+
+```
+ </br>
+</p>
+
+
+
+
+
+
 
 
 
