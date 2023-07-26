@@ -3,6 +3,8 @@
 
 
 <p>
-URI = Fixed to Max minting 11% / Year<br>
+<b>URI - Upline Reward Inflation</b><br>
+Fixed = Update tokenomix<br>
+Desc : Fixed to Max minting 11% / Year (10% staker + 1% upline)<br>
 https://github.com/onerichgroup/smartcontract/blob/main/org/tokenomic.md
 </p>
