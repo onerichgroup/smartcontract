@@ -25,16 +25,15 @@ Fixed = Code<br>
 ```
  <br>
 </p>
-
+<p>
 <b style="color:orange">UMP - Unusual Minting Process</b>
 Fixed = Code<br>
 Desc = Have public bool minted[] for check<br>
 ```sol
 mapping(uint256 => bool) public minted;
-
 function mint(uint256 _id) public {
 if(minted[_id]) return;//filter
-
+}
 ```
  <br>
 </p>
@@ -46,7 +45,16 @@ Fixed : Code<br>
  require(pid <=5 ,"Invalid pid");
  ```
  <br>
+</p>
+
 <p>
+<b>MC - Missing Check</b><br>
+Fixed : Code<br>
+```sol
+ require(pid <=5 ,"Invalid pid");
+ ```
+ <br>
+</p>
 
 
 
