@@ -1,14 +1,14 @@
 <h4>Max Supply : 2,000,000 ORG</h4>
 <h4>Inital Mint : 200,000 ORG (LP,DEV,MARKETING,ETC)</h4>
 <h4>UnMint Supply : 1,800,000 ORG (REWARD DeFi + Staking NFT)</h4>
-<h4>Mint Distribution : 10% (farming+staking) +1% upline from Unmint Supply</h4>
+<h4>Maimum Mint Distribution : 10% (farming+staking) +1% upline from Unmint Supply</h4>
 
 <h2>Distribution Table </h2>
 <table>
   <tr>
     <th>Year</th>
     <th>UnMint</th>
-    <th>Distribution</th>
+    <th>Max Distribution</th>
     <th>Max Supply</th>
   </tr>
     <tr>
