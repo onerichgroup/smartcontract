@@ -20,3 +20,18 @@ MaxReward : Use for set maximum APR if price ORG rise more than expected, with t
 Fixed = Code<br>
  <br>
 </p>
+
+<b>UMP - Unusual Minting Process</b>
+Fixed = Code<br>
+Desc = Have public bool minted[] for check<br>
+```sol
+mapping(uint256 => bool) public minted;
+
+function mint(uint256 _id) public {
+if(minted[_id]) return;//filter
+
+```
+ <br>
+</p>
+
+
