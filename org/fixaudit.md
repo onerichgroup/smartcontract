@@ -14,7 +14,7 @@ https://github.com/onerichgroup/smartcontract/blob/main/org/tokenomic.md
 <b style="color:orange">IRM - Incorrect Reward Mechanism</b></br>
 Fixed = Update tokenomic and desc at withpaper</br>
 Desc : With this distribution model , user must claim periodicaly , because after someone claim , reward pool will reducted , the more often you claim rewards, the rewards you get will be greater than those who claim rewards over a longer period.</br>
-MaxReward : Use for set maximum APR if price ORG rise more than expected, with target APR 10-20% / Year , distribution of reward will lowwer than target maximum ( 100% ).
+MaxReward : Use for set maximum APR if price ORG rise more than expected, with target staking APR 10-20% / Year , distribution of reward will lower than maximum target ( 10% Mint).</br>
  </br>
 </p>
 
