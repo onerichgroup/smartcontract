@@ -20,7 +20,7 @@ MaxReward : Use for set maximum APR if price ORG rise more than expected, with t
 
 <b style="color:orange">PCR - Potential Circular Referral</b></br>
 Fixed = Code</br>
-```sol
+```
   require(Upline != msg.sender,"Upline invalid");
 ```
  </br>
@@ -30,7 +30,7 @@ Fixed = Code</br>
 <b style="color:orange">UMP - Unusual Minting Process</b>
 Fixed = Code</br>
 Desc = Have public bool minted[] for check</br>
-```sol
+```
 mapping(uint256 => bool) public minted;
 function mint(uint256 _id) public {
 if(minted[_id]) return;//filter
@@ -42,7 +42,7 @@ if(minted[_id]) return;//filter
 <p>
 <b>MC - Missing Check</b></br>
 Fixed : Code</br>
-```sol
+```
  require(pid <=5 ,"Invalid pid");
  ```
  </br>
@@ -51,7 +51,7 @@ Fixed : Code</br>
 <p>
 <b>MC - Missing Check</b></br>
 Fixed : Code</br>
-```sol
+```
  require(pid <=5 ,"Invalid pid");
  ```
  </br>
