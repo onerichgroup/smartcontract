@@ -243,17 +243,5 @@ Fixed : Code</br>
 ```
 </br>
 </p>
-
-
-<b>L16 - Validate Variable Setters
-</b></br>
-Fixed : Code</br>
  
-```
-
- 
- 
-```
-</br>
-</p>
 
