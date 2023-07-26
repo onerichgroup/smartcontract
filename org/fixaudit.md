@@ -172,14 +172,14 @@ Fixed : Code</br>
  
 ```
 
-    uint256[] public max_reward_persecond;
-    uint256[] public config_timelock=[7890000,15780000,31560000,47340000,63120000,94680000]; //3,6,12,18,24,36 months
-    uint256 constant public config_referral_percent = 10;
+   uint256[] public max_reward_persecond;
+    uint256[] config_timelock=[7890000,15780000,31560000,47340000,63120000,94680000]; //3,6,12,18,24,36 months
+    uint256 constant   config_referral_percent = 10;
     uint256 public unMint = 2e24;
     uint256 public LastUseDeFi;
-    uint256 constant public YearlyDistributionDeFi = 5;
-    uint256 constant public YearlyDistributionStaking = 5;
-    uint256 constant public secondperyears = 31560000;
+    uint256 constant   YearlyDistributionDeFi = 5;
+    uint256 constant   YearlyDistributionStaking = 5;
+    uint256 constant   secondperyears = 31560000;
     address public DeFiContract;
     bool    public DeFiIsFix = false;
 
