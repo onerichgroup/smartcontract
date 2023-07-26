@@ -10,13 +10,13 @@ https://github.com/onerichgroup/smartcontract/blob/main/org/tokenomic.md
 </p>
 
 <p>
-<b style="color:orange">IRM - Incorrect Reward Mechanism</b>
+<b style="color:orange">IRM - Incorrect Reward Mechanism</b><br>
 Fixed = Update tokenomic and desc at withpaper<br>
 Desc : With this distribution model , user must claim periodicaly , because after someone claim , reward pool will reducted , the more often you claim rewards, the rewards you get will be greater than those who claim rewards over a longer period.<br>
 MaxReward : Use for set maximum APR if price ORG rise more than expected, with target APR 10-20% / Year , distribution of reward will lowwer than target maximum ( 100% ).
 </p>
 
-<b style="color:orange">PCR - Potential Circular Referral</b>
+<b style="color:orange">PCR - Potential Circular Referral</b><br>
 Fixed = Code<br>
  <br>
 </p>
