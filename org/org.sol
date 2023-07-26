@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity 0.8.21;
 
 // OpenZeppelin Contracts (last updated v4.6.0) (token/ERC721/IERC721Receiver.sol)
 interface IERC721Receiver {
@@ -10,80 +10,7 @@ interface IERC721Receiver {
         bytes calldata data
     ) external returns (bytes4);
 }
-
-// File: @openzeppelin\contracts\utils\math\SafeMath.sol
-library SafeMath {
-  
-    function tryAdd(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            uint256 c = a + b;
-            if (c < a) return (false, 0);
-            return (true, c);
-        }
-    }
-    function trySub(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b > a) return (false, 0);
-            return (true, a - b);
-        }
-    }
-    function tryMul(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            // Gas optimization: this is cheaper than requiring 'a' not being zero, but the
-            // benefit is lost if 'b' is also tested.
-            // See: https://github.com/OpenZeppelin/openzeppelin-contracts/pull/522
-            if (a == 0) return (true, 0);
-            uint256 c = a * b;
-            if (c / a != b) return (false, 0);
-            return (true, c);
-        }
-    }
-    function tryDiv(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a / b);
-        }
-    }
-    function tryMod(uint256 a, uint256 b) internal pure returns (bool, uint256) {
-        unchecked {
-            if (b == 0) return (false, 0);
-            return (true, a % b);
-        }
-    }
-    function add(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a + b;
-    }
-    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a - b;
-    }
-    function mul(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a * b;
-    }
-    function div(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a / b;
-    }
-    function mod(uint256 a, uint256 b) internal pure returns (uint256) {
-        return a % b;
-    }
-    function sub(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        unchecked {
-            require(b <= a, errorMessage);
-            return a - b;
-        }
-    }
-    function div(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a / b;
-        }
-    }
-    function mod(uint256 a, uint256 b, string memory errorMessage) internal pure returns (uint256) {
-        unchecked {
-            require(b > 0, errorMessage);
-            return a % b;
-        }
-    }
-}
+ 
 
 // File: @openzeppelin\contracts\utils\introspection\IERC165.sol
 interface IERC165 {
@@ -321,11 +248,9 @@ abstract contract Ownable is Context {
     // import "@openzeppelin/contracts/access/Ownable.sol";
 
 
-    contract ORG is ERC20 , Ownable , ERC20Burnable , IERC721Receiver  {
 
-    using SafeMath
-        for uint256;
-  
+    contract ORG is ERC20 , Ownable , ERC20Burnable , IERC721Receiver  {
+   
     function onERC721Received(
             address,
             address,
@@ -341,13 +266,13 @@ abstract contract Ownable is Context {
  
   
     uint256[] public max_reward_persecond;
-    uint256[] public config_timelock;
-    uint256 public config_referral_percent = 10;
-    uint256 public unMint = 20e24;
+    uint256[] config_timelock=[7890000,15780000,31560000,47340000,63120000,94680000]; //3,6,12,18,24,36 months
+    uint256 constant   config_referral_percent = 10;
+    uint256 public unMint = 2e24;
     uint256 public LastUseDeFi;
-    uint256 public YearlyDistributionDeFi = 5;
-    uint256 public YearlyDistributionStaking = 5;
-    uint256 public secondperyears = 3.156e7;
+    uint256 constant   YearlyDistributionDeFi = 5;
+    uint256 constant   YearlyDistributionStaking = 5;
+    uint256 constant   secondperyears = 31560000;
     address public DeFiContract;
     bool    public DeFiIsFix = false;
     
@@ -391,9 +316,8 @@ abstract contract Ownable is Context {
   
     constructor() ERC20("ONERICH GROUP", "ORG") {
 
-         _limit_mint(msg.sender, 2e24); //initial mint
+         _limit_mint(msg.sender, 2e23); //initial mint
         max_reward_persecond =[1e10,1e10,1e10,1e10,1e10,1e10];
-        config_timelock = [0,0,0,0,0,0]; //in second
         LastUseDeFi = block.timestamp;
      
 
@@ -404,15 +328,22 @@ abstract contract Ownable is Context {
 
     }
 
+    event Stake(address addr, address nft , uint256 tokenId, uint256 pid);
+    event Unstake(address addr, address nft , uint256 tokenId, uint256 pid);
+    event Claim(address addr, uint256 tokenId, uint256 amount);
+    event Affiliate(address addr, uint256 tokenId, uint256 amount);
+    event SendToDefi(uint256 time, uint256 amount);
+    
+
     //protector max suply
     function  _limit_mint(address a,uint256 b) internal {
         if(unMint<b) return; 
         _mint(a, b);
-        unMint = unMint.sub(b);
+        unMint = unMint - b;
     }
 
      function maxSupply() public view returns(uint256) {
-       return unMint.add(totalSupply());
+       return unMint + totalSupply();
     }
 
  
@@ -430,7 +361,10 @@ abstract contract Ownable is Context {
    //stakeing nft 
     function stake( address Upline,uint256 tokenId,uint256 nft,uint256 pid) public {
         require(tokenId>0,"Require nft id");
+        require(Upline != msg.sender,"Upline invalid");
+        require(pid <=5 ,"Invalid pid");
         require(NFT[nft] != address(0),"Require valid nft");
+
         nft_log storage nftdata = nft_logs[tokenId];      
         IERC721(NFT[nft]).safeTransferFrom(msg.sender, address(this), tokenId);
 
@@ -441,13 +375,13 @@ abstract contract Ownable is Context {
         //Note the data of staking at contract   
         nftdata.addr        = msg.sender;
         nftdata.upline      = Upline;
-        nftdata.timestamp   = block.timestamp.add(config_timelock[pid]);
+        nftdata.timestamp   = block.timestamp + config_timelock[pid];
         nftdata.lastclaim   = block.timestamp;
         nftdata.rewardpersecond = max_reward_persecond[pid];
         nftdata.pid = pid;
         nftdata.nft = nft;
 
-        CountLockedNftFloor=CountLockedNftFloor.add(nft);
+        CountLockedNftFloor=CountLockedNftFloor + nft;
 
         
         //log the staking data in array
@@ -467,7 +401,8 @@ abstract contract Ownable is Context {
         }));
         
         
-        
+    emit Stake(msg.sender, NFT[nft] ,tokenId,pid);
+    
     }
 
     function stakings_length() public view returns(uint256) {
@@ -480,14 +415,13 @@ abstract contract Ownable is Context {
  
     // Staking distribution limit | YearlyDistributionStaking
     function pendingreward(uint256 tokenId) public view returns(uint256) {
-        nft_log storage nftdata = nft_logs[tokenId];
-        if(nftdata.addr==address(0)) return 0;
-        uint256 persecond = YearlyDistributionStaking.mul(unMint).mul(nftdata.nft).div(100).div(secondperyears).div(CountLockedNftFloor);
-        uint256 diverent = block.timestamp.sub(nftdata.lastclaim).mul(persecond);
-        uint256 unMintAfterDiverent = unMint.sub(diverent); //Math.min(unmintbefore,unmintafter)
-        uint256 floor_persecond  =  YearlyDistributionStaking.mul(unMintAfterDiverent).mul(nftdata.nft).div(100).div(secondperyears).div(CountLockedNftFloor);
-        uint256 AvailableReward  = block.timestamp.sub(nftdata.lastclaim).mul(floor_persecond);
-        uint256 MaxReward = block.timestamp.sub(nftdata.lastclaim).mul(nftdata.rewardpersecond).mul(nftdata.nft);
+        if(nft_logs[tokenId].addr==address(0)) return 0;
+        uint256 persecond = (((YearlyDistributionStaking * unMint * nft_logs[tokenId].nft)/100)/secondperyears)/CountLockedNftFloor;
+        uint256 diverent = (block.timestamp - nft_logs[tokenId].lastclaim) * persecond;
+        uint256 unMintAfterDiverent = unMint - diverent ; //Math.min(unmintbefore,unmintafter)
+        uint256 floor_persecond  = (((YearlyDistributionStaking * unMintAfterDiverent * nft_logs[tokenId].nft) / 100) / secondperyears)/CountLockedNftFloor;
+        uint256 AvailableReward  = (block.timestamp - nft_logs[tokenId].lastclaim) * floor_persecond;
+        uint256 MaxReward = (block.timestamp - nft_logs[tokenId].lastclaim) * nft_logs[tokenId].rewardpersecond * nft_logs[tokenId].nft;
         if(MaxReward>AvailableReward)MaxReward = AvailableReward;
         return  MaxReward ;
      }
@@ -500,14 +434,18 @@ abstract contract Ownable is Context {
        nft_log storage nftdata = nft_logs[tokenId];
           if(pending>0){
               if(nftdata.upline != address(0)){
-                uint256 affReward  = pending.mul(config_referral_percent).div(100);
+                uint256 affReward  = (pending * config_referral_percent) / 100;
                 _limit_mint(nftdata.upline, affReward);  
+                emit Affiliate(nftdata.upline, tokenId, affReward);
+    
               }
                _limit_mint(nftdata.addr, pending);     
           }
         nftdata.lastclaim = block.timestamp;
         nftdata.rewardpersecond = max_reward_persecond[nftdata.pid];
       
+        emit Claim(nftdata.addr,tokenId,pending);
+    
      }
 
 
@@ -524,18 +462,24 @@ abstract contract Ownable is Context {
     }
 
  
-    function unstake(uint256 tokenId) public {
+    function unstake(uint256 tokenId ,bool is_emergency) public {
         require(tokenId>0,"Require tokenId");
+        if(!is_emergency){
         claim_staking_reward(tokenId);
+        }
         nft_log storage nftdata = nft_logs[tokenId];
         if(nftdata.timestamp<=block.timestamp && nftdata.addr==msg.sender){
             IERC721(NFT[nftdata.nft]).safeTransferFrom(address(this),msg.sender, tokenId);
+
+            emit Unstake(nftdata.addr,nftdata.addr ,   tokenId, nftdata.pid);
+   
+
             //reset data after unstaking
             nftdata.addr = address(0);
             nftdata.timestamp = 0;
             nftdata.lastclaim = 0;
 
-            CountLockedNftFloor=CountLockedNftFloor.sub(nftdata.nft);
+            CountLockedNftFloor=CountLockedNftFloor - nftdata.nft;
 
             stakings.push(staking({
                 addr:msg.sender,
@@ -553,68 +497,34 @@ abstract contract Ownable is Context {
 
           
          }
-         
+        
+      
+    
       }
      
-
-
-     function emergency(uint256 tokenId) public {
-        require(tokenId>0,"Require tokenId");
-      
-           nft_log storage nftdata = nft_logs[tokenId];
-           if(nftdata.timestamp<=block.timestamp && nftdata.addr==msg.sender){
-           IERC721(NFT[nftdata.nft]).safeTransferFrom(address(this),msg.sender, tokenId);
-
-           //reset data after wd
-           nftdata.addr = address(0);
-           nftdata.upline = address(0);
-           nftdata.timestamp = 0;
-           nftdata.lastclaim = 0;
-
-           CountLockedNftFloor=CountLockedNftFloor.sub(nftdata.nft);
-
-           stakings.push(staking({
-                addr:msg.sender,
-                tokenid:tokenId,
-                timestamp:block.timestamp,
-                pid:nftdata.pid,
-                thisIn:false
-            }));
-    
-
-            nftlogs[msg.sender].push(nft_users({
-              tokenId:tokenId,
-              timestamp: nftdata.timestamp,
-              thisIn:false
-           }));
-
-
-         }
-        
-
-    }
-
+ 
 
       // DeFi FUNCTION
       // DeFi distribution limit | YearlyDistributionDeFi
     function defiPool() public view returns(uint256) {
-        uint256 persecond = YearlyDistributionDeFi.mul(unMint).div(100).div(secondperyears);
-        uint256 diverent = block.timestamp.sub(LastUseDeFi).mul(persecond);
-        uint256 unMintAfterDiverent = unMint.sub(diverent);
-        uint256 floor_persecond = YearlyDistributionDeFi.mul(unMintAfterDiverent).div(100).div(secondperyears);
-        uint256 unUseDeFiPool = block.timestamp.sub(LastUseDeFi).mul(floor_persecond);
-
+        uint256 persecond = ((YearlyDistributionDeFi * unMint) / 100) / secondperyears;
+        uint256 diverent = (block.timestamp - LastUseDeFi) * persecond;
+        uint256 unMintAfterDiverent = unMint - diverent;
+        uint256 floor_persecond = ((YearlyDistributionDeFi * unMintAfterDiverent) / 100) / secondperyears;
+        uint256 unUseDeFiPool = (block.timestamp - LastUseDeFi) * floor_persecond;
         return unUseDeFiPool;
     }
 
     // unable to change contract after fix
     function setContract(address defi) public onlyOwner {
-         require(DeFiIsFix == false,"Unable to change DeFi contract");
+         require(!DeFiIsFix,"Unable to change DeFi contract");
+         require(defi != address(0),"Unable to change DeFi contract");
          DeFiContract = defi;
     }
 
     // onetime setup , unable to undo
     function SetFixDefi() public onlyOwner { 
+         require(DeFiContract != address(0),"Unable to change DeFi contract");
          DeFiIsFix = true;
     }
     
@@ -624,6 +534,8 @@ abstract contract Ownable is Context {
         uint256 amount = defiPool();
         if(amount>0)_limit_mint(DeFiContract,amount);
         LastUseDeFi =block.timestamp;
+        emit SendToDefi(LastUseDeFi ,  amount);
+    
         
     }
 
